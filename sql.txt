@@ -1,0 +1,25 @@
+Chapter 1: SQL的基本应用
+
+
+Lecture 1:
+SQL: Structure Query Language (SQL) is a speicla purpose programming language.
+Database: A container to help organize data / a way to efficiently store and retrieve data.
+
+User --SQL---> Database
+
+Why Learnin SQL:
+I. At least 80% - 90% of data analysis work is to wrtie SQL query.
+II. Almost every data-related job interviews will test SQL.
+III. Most of candidates will fail SQL interviews although they have learned it by themselves.
+
+Database ----------> Dataset    ------------------> Model
+·Oracle              ·SAS dataset                   ·Regression
+·AWS/Google          ·CSV                           ·Decision tree
+                     ·txt       ------------------> Busnies Analysis 
+                                                    ·Excel
+                                                    ·Tableau
+
+
+Lecture2:
+
+
