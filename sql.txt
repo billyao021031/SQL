@@ -20,6 +20,55 @@ Database ----------> Dataset    ------------------> Model
                                                     ·Tableau
 
 
-Lecture2:
+Lecture 2:
+
+SQL Server Installation: MYSQLWorkbench
+
+
+Lecture 3:
+
+SQL Statement:
+
+SELECT:（选择）
+Ex. SELECT first_name, last_name FROM contacts;
+
+INSERT: （插入）
+Ex. INSERT INTO contacts(first_name, last_name)
+        VALUES('Fritz', 'Onion');
+
+UPDATE: （修改）
+Ex. UPDATE contacts SET last_name = 'Ahern' WHERE id=1;
+
+DELETE: （删除）
+Ex. DELETE FROM contacts where id = 2;
+
+
+
+SELECT:
+
+Ex. SELECT prod_id, prod_name, prod_price FROM Products;
+
+Ex. SELECT * FROM Products; ---> effective but not recommended (read a huge amount of data)
+
+Ex. SELECT * FROM Products limit 5; ---> limit the amount of data we select
+
+Ex. SELECT DISTINCT vend_id FROM Products ---> avoid selecting repetitive vend_id data from database
+
+Ex. SELECT DISTINCT vend_id, prod_id FROM Products ---> avoid selecting repetitive pairs of vend_id and prod_id from database
+
+
+
+Comment:
+
+SELECT prod_id, prod_name, prod_price FROM Products  -- this is a comment
+
+#This is also a comment
+
+/* This is selecting mutiple lines
+   as comments */
+
+
+
+
 
 
