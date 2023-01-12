@@ -1,6 +1,8 @@
 Chapter 1: SQL的基本应用
 
 
+
+
 Lecture 1:
 SQL: Structure Query Language (SQL) is a speicla purpose programming language.
 Database: A container to help organize data / a way to efficiently store and retrieve data.
@@ -20,9 +22,14 @@ Database ----------> Dataset    ------------------> Model
                                                     ·Tableau
 
 
+
+
+
 Lecture 2:
 
 SQL Server Installation: MYSQLWorkbench
+
+
 
 
 Lecture 3:
@@ -72,3 +79,43 @@ SELECT prod_id, prod_name, prod_price FROM Products  -- this is a comment
 
 
 
+
+
+
+
+
+Chapter 2: SQL中的筛选和函数使用
+
+
+
+
+Lecture 1:
+
+
+Order By Clause:  (default ascending sort order)
+
+ORDER BY takes the name of one or more columns by which to sort the output.
+
+Ex. SELECT prod_name FROM Products ORDER BY prod_name;  (sort by one single conlumn order)
+
+Ex. SELECT prod_id, prod_price, prod_name FROM Products ORDER BY prod_price, prod_name;  (sort by mutiple columns order)
+
+Ex. SELECT prod_id, prod_price, prod_name FROM Products ORDER BY 2, 3;  (sort by relative position column)
+
+
+Order by descending order:
+
+SELECT prod_id, prod_price, prod_name FROM Products ORDER BY prod_price DESC;
+
+
+Filter Data by using Where Clause:
+
+SELECT ---> FROM ----> WHERE ---> ORDER BY
+
+Ex. SELECT prod_name, prod_price FROM Products WHERE prod_price = 3.49;
+
+Ex. SELECT prod_name, prod_price FROM Products WHERE prod_price BETWEEN 5 AND 10; (inclusive)
+
+Ex. SELECT * From Customers WHERE Cust_email is not NULL; ("is not NUll" refers to non-empty blank)
+
+Ex. SELECT prod_name, prod_price FROM Products WHERE vend_id = 'DLL01" AND prod_price <= 4;
