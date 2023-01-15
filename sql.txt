@@ -51,7 +51,7 @@ Ex. DELETE FROM contacts where id = 2;
 
 
 
-SELECT:
+SELECT(选择):
 
 Ex. SELECT prod_id, prod_name, prod_price FROM Products;
 
@@ -65,7 +65,7 @@ Ex. SELECT DISTINCT vend_id, prod_id FROM Products ---> avoid selecting repetiti
 
 
 
-Comment:
+Comment(注释):
 
 SELECT prod_id, prod_name, prod_price FROM Products  -- this is a comment
 
@@ -92,6 +92,8 @@ Chapter 2: SQL中的筛选和函数使用
 Lecture 1:
 
 
+Order从句进行column排序：
+
 Order By Clause:  (default ascending sort order)
 
 ORDER BY takes the name of one or more columns by which to sort the output.
@@ -103,12 +105,16 @@ Ex. SELECT prod_id, prod_price, prod_name FROM Products ORDER BY prod_price, pro
 Ex. SELECT prod_id, prod_price, prod_name FROM Products ORDER BY 2, 3;  (sort by relative position column)
 
 
+降序排列：
+
 Order by descending order:
 
 SELECT prod_id, prod_price, prod_name FROM Products ORDER BY prod_price DESC;
 
 
-Filter Data by using Where Clause:
+WHERE从句用于筛选数据：
+
+Filter Data by using Where Clause: 
 
 SELECT ---> FROM ----> WHERE ---> ORDER BY
 
@@ -119,3 +125,42 @@ Ex. SELECT prod_name, prod_price FROM Products WHERE prod_price BETWEEN 5 AND 10
 Ex. SELECT * From Customers WHERE Cust_email is not NULL; ("is not NUll" refers to non-empty blank)
 
 Ex. SELECT prod_name, prod_price FROM Products WHERE vend_id = 'DLL01" AND prod_price <= 4;
+
+
+
+
+
+Lecture 2:
+
+AND放在OR前面
+
+SQL processes AND operators before OR operators.
+
+Ex. SELECT prod_name, prod_price FROM Products WHERE (vend_id = 'DLL01' OR vend_id = 'BRS01') AND prod_price >= 10;
+
+
+IN用于代替多个OR
+
+IN operators  ---> used to specify a range of conditions, any of which can be matched (equivalent to a series of "or")
+
+Ex. SELECT prod_name, prod_price, vend_id FROM Products WHERE vend_id IN ('DLL01', 'BRS01'); 
+
+
+Wildcard筛选（筛选类似数据
+
+WildCard Filtering ---> can be only used with text fields (strings)
+
+1). '%' match any number of occurrences of any character （任意位置筛选）
+
+Ex. SELECT prod_id, prod_name FROM Products WHERE prod_name LIKE 'Fish%';
+
+Ex. SELECT prod_id 
+
+2). '_' macth a single character （固定长度筛选）
+
+Ex. SELECT prod_id, prod_name FROM Products WHERE prod_name LIKE '__inch teddy bear';
+
+
+
+
+
