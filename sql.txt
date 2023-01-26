@@ -237,4 +237,17 @@ Chapter 3: 数据的汇总
 
 Lecture 3.1
 
+Examples of Aggregate Functions
 
+1). Determining the number of rows in a table; 
+2). Obtaining the sum of a set of rows in a table;
+3). Finding the highest, lowest, and average values in a table column
+
+
+AVG(), COUNT(), MAX(), MIN(), SUM() only five aggregate functions in SQL
+
+AVG() Function - can be used to return the average value of any function:
+        Ex.SELECT AVG(prod_price) AS avg_price FROM Products WHERE vend_id = 'DLL01';
+        有空值的时候跳过空值，所以计算时的total number会有变化
+
+COUNT() Function -      

@@ -20,4 +20,6 @@ select * from country
 where substring(code,1,2) <> code2;
 
 select *, case when substring(code,1,2) = code2 then 'match'
-else 'not match' end as code_check from country;
+			   else 'not match' 
+               end as code_check 
+               from country;
