@@ -162,7 +162,7 @@ Ex. SELECT prod_id, prod_name FROM Products WHERE prod_name LIKE '__inch teddy b
 
 
 
-Lecutre 2.3: Create Calculated Fields
+Lecture 2.3: Create Calculated Fields
 
 
 Rather than retrieve data as it is, what you really want is to retireve converted,
@@ -232,6 +232,11 @@ Ex. ABS(), COS(), EXP()....
 
 
 
+
+
+
+
+
 Chapter 3: 数据的汇总
 
 
@@ -244,10 +249,130 @@ Examples of Aggregate Functions
 3). Finding the highest, lowest, and average values in a table column
 
 
-AVG(), COUNT(), MAX(), MIN(), SUM() only five aggregate functions in SQL
+AVG(), COUNT(), MAX(), MIN(), SUM() only five aggregate functions in SQL  (Make sure only one column in the bracket)
 
 AVG() Function - can be used to return the average value of any function:
         Ex.SELECT AVG(prod_price) AS avg_price FROM Products WHERE vend_id = 'DLL01';
         有空值的时候跳过空值，所以计算时的total number会有变化
 
-COUNT() Function -      
+
+COUNT() Function - can determine the number of rows in a table or the number of rows that match a specific criterion
+        Ex. SELECT COUNT(*) AS num_cust FROM Customers;
+        返回customer列表中所有的行数，包括null
+
+        Ex. SELECT COUNT(cust_email) AS num_cust FROM Customers;
+        返回cust_email中不包含null的行数
+
+MAX() Function - return the highest value in a specified column;
+        Ex. SELECT MAX(prod_price) AS max_price FROM Products;
+
+MIN() Function - return the lowest value in a specified column;
+        Ex. SELECT MIN(prod_price) AS min_price FROM Products;
+        
+        Columns with null values would be ignored.
+
+SUM() Function - return the sum of the values in a specific column
+        Ex. SELECT SUM(quantity) AS items_ordered FROM OrderItems WHERE order_num = 20005;
+        返回一个column内所有值的和
+
+        Ex. SELECT SUM(item_price*quantity) AS total_sales FROM OrderItems WHERE order_num = 20005;
+        返回多个column计算的和
+
+
+Aggregate on DISTINCT values:
+
+Ex. SELECT COUNT(DISTINCT prod_price) AS count_price FROM Products WHERE vend_id = 'DLL01';
+
+Ex. SELECT COUNT(DISTINCT vend_id) FROM Products;
+
+
+
+WHEN DOING ANALYSIS:
+
+IDENTYFY !!! ----
+                1). how many records?                    
+                2). whether there are missings?
+                3). whether there are dup records?
+
+Solution: SELECT
+          COUNT(*)                                  //find records
+          COUNT(vend_id)                            //find missing 
+          COUNT(DISTINCT vend_id) FROM Products;    //find duplicates
+
+
+
+
+Lecture 3.2
+
+Groups are created using the GROUP BY clause in your SELECT statement
+
+SELECT  vend_id,
+        COUNT(*) AS num_prod
+        FROM Products
+        GROUP BY vend_id
+        ORDER BY num_prods;
+
+
+Sometimes we call non-aggregated columns as segmentation variables:
+
+You can have more than one non-aggregated columns in SELECT statement, but make sure they are also in GROUP BY. 
+select中的分类变量必须出现在group by里!!!
+
+SELECT  order_num, prod_id,
+        SUM(quantity)
+        FROM OrderItems
+        GROUP BY order_num, prod_id;
+
+We can group by using relative position.
+
+SELECT  order_num, prod_id,
+        SUM(quantity)
+        FROM OrderItems
+        GROUP BY 1, 2;
+
+
+
+Filter Group 
+
+We have to use HAVING clause, instead of WHERE clause.
+
+WHERE -- filter before data is grouped
+HAVING -- filter after data is grouped
+
+SELECT vend_id, COUNT(*) AS num_prods
+        FROM Products
+        WHERE prod_price >= 4
+        GROUP BY vend_id
+        HAVING COUNT(*) > 3;
+
+
+
+
+Clause                          Description                             Required
+
+SELECT                          Columns or expressions to be            YES
+                                returned                
+
+FROM                            Table to retrieve data from             Only if selecting data from a table
+
+WHERE                           Row-level filtering                     No
+
+GROUP BY                        Group Specification                     Only if calculating aggregates by group
+
+HAVING                          Group-level filtering                   No
+
+ORDER BY                        Output sort order                       No
+
+
+
+
+Subquery -- queries that are embedded into other queries
+
+SELECT cust_name, cust_contact
+FROM Customers
+WHERE cust_id IN (SELECT cust_id
+                        FROM Orders
+                        WHERE order_num IN (SELECT order_num FROM OrderItems 
+                                            WHERE prod_id = 'RGAN101'));
+
+Subquery SELECT statements can only retrieve  a single column. Attempting to retrieve multiple columns will return an error.
