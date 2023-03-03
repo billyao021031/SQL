@@ -376,3 +376,101 @@ WHERE cust_id IN (SELECT cust_id
                                             WHERE prod_id = 'RGAN101'));
 
 Subquery SELECT statements can only retrieve  a single column. Attempting to retrieve multiple columns will return an error.
+
+
+
+
+
+
+
+
+
+
+Chapter 4 Join的使用和进阶
+
+
+
+Lecture 4.1 Join的灵活使用1(inner join)
+
+A join is a mechanism used to associate tables within a SELECT statement
+
+        SELECT vend_name, prod_name, prod_price 
+        FROM Vendors, Products 
+        WHERE Vendors.vend_id = Products.vend_id     <--- join condition
+
+The WHERE clause acts as a filter to only include rows that match the specified filter condition. 
+
+Without join condition, Cartesion Product will be generated - number of rows retrieved will be the number of rows in the first table 
+multiplied by the number of rows in the second table.
+
+In all types of joins, SQL generates a Cartesian Product first, then eliminates the rows that do not meet the criteria. 
+
+
+
+Inner Join 定义: Only returns the rows that match across all tables
+
+Two forms:
+
+SELECT * FROM Vendors, Products
+WHERE Vendors.vend_id = Products.vend_id;
+
+SELECT * FROM Vendors JOIN Products
+WHERE Vendors.vend_id = Products.vend_id;
+
+
+Join multiple tables:
+
+SELECT prod_name, vend_name, prod_price, quantity FROM OrderItems, Products, Vendors
+WHERE Products.vend_id = Vendors.vend_id
+AND OrderItems.prod_id = Products.prod_id
+AND order_num = 20007;
+
+
+Using Join is more efficient than subqueries. 
+
+
+
+
+Lecture 4.2 Join的灵活使用2(left, right, outer)
+
+
+Ex. SELECT cust_name, cust_contact 
+        FROM Customers, Orders, OrderItems
+        WHERE Customers.cust_id = Orders.cust_id
+        AND OrderItems.order_num = Orders.order_num
+        AND prod_id = 'RGAN01';
+
+---- Join multiple tables
+SELECT cust_name, cust_contact 
+        FROM Customers JOIN Orders ON Customers.cust_id = Orders.cust_id
+        JOIN OrderItems ON OrderItems.order_num = Orders.order_num
+        WHERE prod_id = 'RGAN01';
+
+
+Use Table Aliases
+We can use aliases for column names and calculated fields, SQL also enables you to alias table names. 
+·To shorten the SQL syntax
+·To enable multiple uses of the same table within a single SELECT statement
+
+
+SELECT C.cust_id,cust_name,cust_contact
+	FROM Customers AS C, Orders AS O, OrderItems AS OI
+	WHERE C.cust_id = O.cust_id
+	AND OI.order_num = O.order_num
+	AND prod_id = 'RGAN01';
+
+
+
+
+
+Chapter 5: SQL的高阶应用
+
+
+Lecture 5.1 对表格进行更改添加删除操作
+
+
+Insert Into 添加
+
+·Insert a single complete row
+`
+
