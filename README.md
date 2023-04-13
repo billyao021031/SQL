@@ -66,6 +66,8 @@ SELECT prod_id, prod_name, prod_price FROM Products  ` -- this is a comment `
 ` /* This is selecting mutiple lines ` <br>
 ` as comments */ `
 
+---
+
 <br>
 <br>
 
@@ -132,36 +134,208 @@ SELECT ---> FROM ----> WHERE ---> ORDER BY
 
 > Rather than retrieve data as it is, what you really want is to retireve converted, calculated, or reformatted data directly from the database. 
 
-- Concatenating Fields: (组合列)
+- ***Concatenating Fields: (组合列)***
 
   ` SELECT concat(vend_name, ' (', vend_country, ') ') FROM Vendors ORDER BY vend_name; `
 
-- Aliases: (命名) 
+- ***Aliases: (命名)***
 
   ` SELECT concat(vend_name, ' (', vend_country, ') ') AS vend_title FROM Vendors ORDER BY vend_name; `
 
-- Calculation: (计算)
+- ***Calculation: (计算)***
 
   ` SELECT quantity * item_price AS total_sales, prod_id, quantity, item_price FROM OrderItems WHERE order_num = 20008; `
   
 #### Use Data Manipulation Functions:
 
-- Extract part of a strings
+- ***Extract part of a strings***
   
   UPPER() ---> ` SELECT vend_name, UPPER (vend_name) AS vend_name_uppercase FROM Vendors ORDER BY vend_name; `
   
   SUBSTRING() ---> ` SELECT vend_name, SUBSTRING(vend_name, 1, 4) AS first_4_letters_of_vend_name FROM Vendors ORDER BY vend_name; `
   
--  Datatype converstion
+-  ***Datatype converstion***
     
-   EAR() ---> ` SELECT order_num, order_date FROM Orders WHERE YEAR(order_date) = 2012; `
+   YEAR() ---> ` SELECT order_num, order_date FROM Orders WHERE YEAR(order_date) = 2012; `
 
    NOW() ---> ` SELECT order_num, order_date, NOW() as currentdateandtime FROM Orders; `
 
--  Get current date
+-  ***Get current date***
     
    curdate() ---> Return current date as a single column
   
    datediff(curdate(), order_date) ---> ` SELECT order_num, order_date NOW() as currentdateandtime, curdate() as curdt, datediff(curdate(), order_date) as dategap FROM Orders; `
 
+#### CASE Expression: (control flow function)
+
+It can be used to conditionally enter into some logic based on the status of a condition being satisfied. Conditions have to be mutually exclusive.  
+
+CASE WHEN [value=compare_value] THEN result
+
+```
+  SELECT prod_price,
+       case when prod_price < 6 then 'low price'
+	     else 'high price'
+	     end as price_segment
+  FROM Products;
+```
+
+#### Numeric Functions
+
+These are used to perform mathematical operations on numeric data, for example, returning absolute numbers and performing algebraic calculations. 
+
+` ABS(), COS(), EXP().... `
+
+---
+
+<br>
+<br>
+
+## Chapter 3: 数据的汇总
+
+### Lecture 3.1 汇总数据1
+
+#### Examples of Aggregate Functions
+
+- Determining the number of rows in a table; 
+- Obtaining the sum of a set of rows in a table;
+- Finding the highest, lowest, and average values in a table column
+
+#### AVG(), COUNT(), MAX(), MIN(), SUM() only five aggregate functions in SQL  (Make sure only one column in the bracket)
+
+- ***AVG() Function - can be used to return the average value of any function***
+  
+  ` SELECT AVG(prod_price) AS avg_price FROM Products WHERE vend_id = 'DLL01'; ` 
+  
+  有空值的时候跳过空值，所以计算时的total number会有变化
+  
+- ***COUNT() Function - can determine the number of rows in a table or the number of rows that match a specific criterion***
+
+  ` SELECT COUNT(*) AS num_cust FROM Customers; `
+  
+  返回customer列表中所有的行数，包括null
+  
+  ` SELECT COUNT(cust_email) AS num_cust FROM Customers; `
+  
+  返回cust_email中不包含null的行数
+
+- ***MAX() Function - return the highest value in a specified column***
+
+  ` SELECT MAX(prod_price) AS max_price FROM Products; `
+
+- ***MIN() Function - return the lowest value in a specified column***
+  
+  ` SELECT MIN(prod_price) AS min_price FROM Products; `
+  
+- ***SUM() Function - return the sum of the values in a specific column***
+
+  ` SELECT SUM(quantity) AS items_ordered FROM OrderItems WHERE order_num = 20005; `
+  
+  返回一个column内所有值的和
+  
+  ` SELECT SUM(item_price*quantity) AS total_sales FROM OrderItems WHERE order_num = 20005; `
+  
+  返回多个column计算的和
+  
+#### Aggregate on DISTINCT values:
+  
+  ` SELECT COUNT(DISTINCT prod_price) AS count_price FROM Products WHERE vend_id = 'DLL01'; `
+  
+  ` SELECT COUNT(DISTINCT vend_id) FROM Products; `
+  
+#### WHEN DOING ANALYSIS:
+
+**IDENTIFY!!!**
+
+  1. how many records?                    
+  2. whether there are missings?
+  3. whether there are dup records?
+
+**Solution:** SELECT
+
+          COUNT(*)                                  //find records
+          
+          COUNT(vend_id)                            //find missing 
+          
+          COUNT(DISTINCT vend_id) FROM Products;    //find duplicates
+          
+---
+
+### Lecture 3.2 汇总数据2
+
+Groups are created using the ` GROUP BY ` clause in your SELECT statement
+
+```
+SELECT  vend_id,
+        COUNT(*) AS num_prod
+        FROM Products
+        GROUP BY vend_id
+        ORDER BY num_prods;
+```
+
+Sometimes we call ` non-aggregated ` columns as ` segmentation variables `.
+
+You can have more than one non-aggregated columns in SELECT statement, but make sure they are also in GROUP BY. 
+**select中的分类变量必须出现在group by里!!!**
+
+```
+SELECT  order_num, prod_id,
+        SUM(quantity)
+        FROM OrderItems
+        GROUP BY order_num, prod_id;
+```
+
+We can group by using relative position.
+
+```
+SELECT  order_num, prod_id,
+        SUM(quantity)
+        FROM OrderItems
+        GROUP BY 1, 2;
+```
+
+#### FILTER Group
+
+We have to use HAVING clause, instead of WHERE clause.
+
+**WHERE --** filter before data is grouped
+
+**HAVING --** filter after data is grouped
+
+```
+SELECT vend_id, COUNT(*) AS num_prods
+        FROM Products
+        WHERE prod_price >= 4
+        GROUP BY vend_id
+        HAVING COUNT(*) > 3;
+```
+
+Clause | Description | Required| 
+-------|-------------|---------|
+SELECT | Columns or expressions to be returned | YES
+FROM   | Table to retrieve data from | Only if selecting data from a table
+WHERE  | Row-level filtering | NO
+GROUP BY | Group Specification | Only if calculating aggregates by group
+HAVING | Group-level filtering | Only if calculating aggregates by group
+ORDER BY | Output sort order | NO
+
+#### Subquery -- queries that are embedded into other queries
+
+```
+SELECT cust_name, cust_contact
+FROM Customers
+WHERE cust_id IN (SELECT cust_id
+                        FROM Orders
+                        WHERE order_num IN (SELECT order_num FROM OrderItems 
+                                            WHERE prod_id = 'RGAN101'));
+```
+
+Subquery SELECT statements can only retrieve a single column. Attempting to retrieve multiple columns will return an error.
+
+---
+
+<br>
+<br>
+
+## Chapter 4: Join的使用和进阶
 
