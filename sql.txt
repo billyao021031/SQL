@@ -83,7 +83,6 @@ SELECT prod_id, prod_name, prod_price FROM Products  -- this is a comment
 
 
 
-
 Chapter 2: SQL中的筛选和函数使用
 
 
@@ -146,13 +145,11 @@ Ex. SELECT prod_name, prod_price, vend_id FROM Products WHERE vend_id IN ('DLL01
 
 Wildcard筛选（筛选类似数据
 
-WildCard Filtering ---> can be only used with text fields (strings)
+WildCard Filtering ---> can be only used with text fields (strings) 
 
 1). '%' match any number of occurrences of any character （任意位置筛选）
 
 Ex. SELECT prod_id, prod_name FROM Products WHERE prod_name LIKE 'Fish%';
-
-Ex. SELECT prod_id 
 
 2). '_' macth a single character （固定长度筛选）
 
@@ -375,7 +372,7 @@ WHERE cust_id IN (SELECT cust_id
                         WHERE order_num IN (SELECT order_num FROM OrderItems 
                                             WHERE prod_id = 'RGAN101'));
 
-Subquery SELECT statements can only retrieve  a single column. Attempting to retrieve multiple columns will return an error.
+Subquery SELECT statements can only retrieve a single column. Attempting to retrieve multiple columns will return an error.
 
 
 
@@ -463,14 +460,124 @@ SELECT C.cust_id,cust_name,cust_contact
 
 
 
+
+
+
+
+
+
 Chapter 5: SQL的高阶应用
 
 
 Lecture 5.1 对表格进行更改添加删除操作
 
 
-Insert Into 添加
-
+Insert Into 添加数据
 ·Insert a single complete row
-`
+·Insert a single partial row
+·Insert the result of a query
+
+Example: INSERT INTO Customers
+         VALUES
+         ('100000006', 'Toy Land', '123 Any Street', 'New York', 'NY', 'NULL', 'NULL');
+
+Example: insert into Customers
+(cust_id,
+cust_name,
+cust_address,cust_city,
+cust_state,
+cust_zip,
+cust_country,
+cust_contact,cust_email)
+select
+cust_id,
+cust_name,
+cust_address,cust_city,
+cust_state,
+cust_zip,
+cust_country,
+cust_contact,cust_email
+from CustNew;
+（创建表格加入表)
+
+
+Update 更新数据
+·To update specific rows in a table
+·Tp update all rows in a table
+  Example: UPDATE customers SET cust_email = 'kim@gmail.com'
+           WHERE cust_id = '1000000005'
+·Without WHERE clause, the database will update all rows.
+
+
+Delete 删除数据
+·To delete specific rows from a table
+·To delte all rows from a atable
+Ex. DELETE FROM Customers WHERE cust_id = 'Toy Land2';
+
+It only deletes rows from the table, but never deltes the table itself.
+
+
+Create Table 创建表格
+Ex. CREATE TABLE new_c AS 
+        SELECT * FROM customers
+
+
+Drop Table 移除表格
+Ex. DROP TABLE new_c;
+Ex. drop table if exists new_customers;
+
+
+Derived Table 嵌套query创建临时表格
+Ex. SELECT a.vend_id, b.vend_city  FROM 
+(SELECT vend_id, COUNT(*) AS num_prods
+	FROM Products
+	WHERE prod_price >= 4
+	GROUP BY vend_id
+    Having num_prods >=2
+    order by num_prods) AS A
+    left join
+Vendors as b
+on a.vend_id=b.vend_id;
+
+每个derive table必须要有名字
+
+
+
+ 
+Lecture 5.2 - 高级应用-Window Function
+
+MySQL 8.0.2 introduces SQL window functions, or analytic functions as they are also sometimes called.
+
+WINDOW_FUNCTION_NAME(expression)
+        OVER(
+                [PARTITION DEFINITION]
+                [ORDER_DEFINITION]
+        )
+
+If the OVER Clause is empty, which treats the entire set of query rows as a single partition.
+If the OVER clause partitions rows by certain things, producing a sum per partition.
+
+
+ROW_NUMBER() Window Function
+可以使用row number去dedupe，去掉重复项
+
+Ex. SELECT cust_id, 
+order_date, 
+ROW_NUMBER() OVER (PARTITION BY cust_id ORDER BY order_date desc) AS row_num 
+FROM Orders;
+
+选择cust_id和order_date, 使用row number函数，以cust_id作为分类，以日期作为排序，找到row number
+之后可以筛选row number为1的，找到每个id用户最近的交易。
+
+
+
+
+
+
+
+
+
+Chapter 6: SQL的高阶应用-CTE(common table expression)
+
+Lecture6.1 使用with语句创建简单的通用表
 
