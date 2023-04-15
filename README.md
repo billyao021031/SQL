@@ -339,3 +339,46 @@ Subquery SELECT statements can only retrieve a single column. Attempting to retr
 
 ## Chapter 4: Join的使用和进阶
 
+### Lecture 4.1 Join的灵活使用1(inner join)
+
+A join is a mechanism used to associate tables within a SELECT statement
+
+```
+SELECT vend_name, prod_name, prod_price 
+       FROM Vendors, Products 
+       WHERE Vendors.vend_id = Products.vend_id     <--- join condition
+```
+
+The ` WHERE clause ` acts as a filter to only include rows that match the specified filter condition. 
+
+Without ` join condition `, ` Cartesion Product ` will be generated - number of rows retrieved will be the number of rows in the first table multiplied by the number of rows in the second table.
+
+> In all types of joins, SQL generates a Cartesian Product first, then eliminates the rows that do not meet the criteria. 
+
+#### Inner Join 定义: Only returns the rows that match across all tables
+
+***Two forms:***
+
+```
+SELECT * FROM Vendors, Products
+WHERE Vendors.vend_id = Products.vend_id;
+
+```
+
+```
+SELECT * FROM Vendors JOIN Products
+WHERE Vendors.vend_id = Products.vend_id;
+
+```
+
+***Join multiple tables:***
+
+```
+SELECT prod_name, vend_name, prod_price, quantity FROM OrderItems, Products, Vendors
+	WHERE Products.vend_id = Vendors.vend_id
+	AND OrderItems.prod_id = Products.prod_id
+	AND order_num = 20007;
+	
+```
+
+***Using Join is more efficient than subqueries.***
