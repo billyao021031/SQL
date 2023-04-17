@@ -475,6 +475,51 @@ Right Join: All matching rows plus nonmatching rows from the second table specif
 Full Outer: All matching rows plus nonmatching rows in both tables.
 
 
+Outer Join - the join includes table rows that have no associated rows in the related table
+
+SELECT Customers.cust_id, Orders.order_num 
+        FROM Customers LEFT OUTER JOIN Orders
+        ON Customers.cust_id = Orders.cust_id;
+
+无法使用WHERE添加join condition 
+
+注意Left join和Right join时不同的主表
+
+A right outer join can be turned into a left outer join simply by reversing the order of the tables in the FROM clause. 
+
+
+重要：什么时候使用inner join什么时候使用left join? 
+
+使用left join可以保存原数据量的情况下进行分析（missing sometimes means something)
+
+
+SUMMARY OF JOINS:
+
+Pay careful attention to the type of join being used. More often than not, you'll want an inner join, but there are often valid uses for outer joins, too.
+
+Check your DBMS documentation for the exact join syntax it supports.
+
+Make sure you use the correct join condition, and provide a join condition. 
+
+You may include multiple tables in a join and even have different join types for each. 
+
+
+Conmbine Queries
+
+Using UNION can combine two queries. All you do is specify each SELECT statement and place the keyword UNION in between.  
+
+UNION会自动去重复，可以使用UNION ALL保存重复
+
+
+Interview Questions: 
+
+Left Join tableA on tableB. Table A has 100 rows and tableB has 50 rows. How many rows at least would the result be?
+
+At least 100 rows. Could be more if the left join finds extra pairs. 
+
+
+
+
 
 
 
