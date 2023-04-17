@@ -386,7 +386,6 @@ Subquery SELECT statements can only retrieve a single column. Attempting to retr
 Chapter 4 Join的使用和进阶
 
 
-
 Lecture 4.1 Join的灵活使用1(inner join)
 
 A join is a mechanism used to associate tables within a SELECT statement
@@ -437,7 +436,7 @@ Ex. SELECT cust_name, cust_contact
         AND OrderItems.order_num = Orders.order_num
         AND prod_id = 'RGAN01';
 
----- Join multiple tables
+---- Join multiple tables Using inner join key word 
 SELECT cust_name, cust_contact 
         FROM Customers JOIN Orders ON Customers.cust_id = Orders.cust_id
         JOIN OrderItems ON OrderItems.order_num = Orders.order_num
@@ -450,14 +449,30 @@ We can use aliases for column names and calculated fields, SQL also enables you 
 ·To enable multiple uses of the same table within a single SELECT statement
 
 
-SELECT C.cust_id,cust_name,cust_contact
+SELECT C.cust_id,cust_name,cust_contact                        
 	FROM Customers AS C, Orders AS O, OrderItems AS OI
 	WHERE C.cust_id = O.cust_id
 	AND OI.order_num = O.order_num
 	AND prod_id = 'RGAN01';
 
 
+Do remember to add on the table name in the selection to avoid selecting the same column from multiple tables.
 
+SELECT C.*, O.order_num 
+        FROM Customers AS C, Orders AS O 
+        WHERE C.cust_id = O.cust_id;
+
+使用Join时候，WHERE并非先作用，先产生cartesian product，再用条件进行筛选
+
+
+
+Lecture 4.3 Join的灵活使用3(multiple join)
+
+Left Join: All matching rows plus nonmatching rows from the first table specified in the FROM clause
+
+Right Join: All matching rows plus nonmatching rows from the second table specified in the FROM clause
+
+Full Outer: All matching rows plus nonmatching rows in both tables.
 
 
 
